@@ -1,0 +1,31 @@
+{
+  "name": "frost",
+  "version": "0.0.0",
+  "description": "Eventstore in the browser (or server)",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vinntreus/frost.git"
+  },
+  "keywords": [
+    "eventstore",
+    "events"
+  ],
+  "author": "Daniel Vinntreus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vinntreus/frost/issues"
+  },
+  "homepage": "https://github.com/vinntreus/frost",
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "gulp": "^3.8.8",
+    "gulp-jshint": "^1.8.5",
+    "gulp-mocha": "^1.1.1",
+    "jshint": "^2.5.6",
+    "mocha": "^1.21.4"
+  }
+}

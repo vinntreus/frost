@@ -1,0 +1,14 @@
+{
+    "boss":      true,
+    "node":      true,
+    "smarttabs": true,
+    "undef":     true,
+    "unused":    true,
+    "onecase":   true,
+    "lastsemic": true,
+    "newcap":    false,
+    "maxlen":    100,
+    "indent":    2,
+    "strict": false,
+    "predef": [ "describe", "it" ]
+}
