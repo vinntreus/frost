@@ -10,5 +10,5 @@
     "maxlen":    100,
     "indent":    2,
     "strict": false,
-    "predef": [ "describe", "it" ]
+    "predef": [ "describe", "it", "beforeEach" ]
 }
