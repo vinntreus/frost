@@ -15,6 +15,6 @@ gulp.task('lint', function(){
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('develop', function(){
+gulp.task('develop', ['default'], function(){
   gulp.watch(['test/*.js', 'lib/*.js'], ['default']);
 });
