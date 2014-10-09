@@ -1,6 +1,14 @@
 var expect = require('chai').expect;
 var frost = require('../lib/frost.js');
 
+var getValidEvent = function(){
+  return {
+    name : 'a',
+    key: 'b',
+    data: {}
+  };
+};
+
 describe('adding events', function(){
   var es, store, idGenerator;
   
@@ -13,27 +21,51 @@ describe('adding events', function(){
   it('should store event', function(done){
     store.save = function(event){ 
       expect(event.name).to.equal('a');
+      expect(event.key).to.equal('b');
+      expect(event.data.a).to.equal('b');
       done();
     };
-    es.add({name : 'a'});
+    es.add({name : 'a', key: 'b', data : { a : 'b'} });
   });
 
-  it('should throw exception if name is missing', function(){
-    var addWithoutName = function(){
-      es.add({});
-    };
-    expect(addWithoutName).to.throw('event name');
+  describe('name is missing', function(){
+    it('should throw exception if name is missing', function(){
+      testPropertyIs(function(e){delete e.name;});
+    });
+
+    it('should throw exception if name is null', function(){
+      testPropertyIs(function(e){e.name = null;});
+    });
+
+    it('should throw exception if name is empty', function(){
+      testPropertyIs(function(e){e.name = '';});
+    });
   });
 
-  it('should throw exception if name is null', function(){
-    var addWithNameNull = function(){
-      es.add({name : null});
-    };
-    expect(addWithNameNull).to.throw('event name');
+  describe('missing key', function(){
+    it('should throw exception if key is missing', function(){
+      testPropertyIs(function(e){delete e.key;});
+    });
+    it('should throw exception if key is null', function(){
+      testPropertyIs(function(e){e.key = null;});
+    });
+    it('should throw exception if key is empty', function(){
+      testPropertyIs(function(e){e.key = '';});
+    });
   });
+
+  function testPropertyIs(callback){
+      var addWithoutKey = function(){
+        var e = getValidEvent();
+        callback(e);
+        es.add(e);
+      };
+      expect(addWithoutKey).to.throw('event');
+  }
 
   it('should create clone of event data', function(){
-    var eventData = {name: 'a'};
+    var eventData = getValidEvent();
+    eventData.name = 'a';
     store.save = function(event){ 
       event.name = 'b';
     };
@@ -42,19 +74,22 @@ describe('adding events', function(){
   });
 
   it('should keep id if passed in', function(done){
+    var event = getValidEvent();
+    event.id = 1;
     store.save = function(event){ 
       expect(event.id).to.equal(1);
       done();
     };
-    es.add({name : 'a', id: 1});
+    es.add(event);
   });
 
   it('should generate id if missing', function(done){
+    var event = getValidEvent();
     idGenerator.generate = function(){ return 2;};
     store.save = function(event){ 
       expect(event.id).to.equal(2);
       done();
     };
-    es.add({name : 'a'});
+    es.add(event);
   });
 });
