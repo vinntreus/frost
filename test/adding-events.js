@@ -14,7 +14,7 @@ describe('adding events', function(){
   
   beforeEach(function(){
     store = { save : function(){}};
-    idGenerator = { generate : function(){}};
+    idGenerator = function(){};
     es = frost({store : store, idGenerator : idGenerator});
   });
 
@@ -85,7 +85,7 @@ describe('adding events', function(){
 
   it('should generate id if missing', function(done){
     var event = getValidEvent();
-    idGenerator.generate = function(){ return 2;};
+    es.setIdGenerator(function(){ return 2;});
     store.save = function(event){ 
       expect(event.id).to.equal(2);
       done();
