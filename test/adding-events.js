@@ -1,4 +1,4 @@
-var expect = require('chai').expect;
+var assert = require('chai').assert;
 var frost = require('../lib/frost.js');
 
 var getValidEvent = function(){
@@ -14,15 +14,15 @@ describe('adding events', function(){
   
   beforeEach(function(){
     store = { save : function(){}};
-    idGenerator = function(){};
     es = frost({store : store, idGenerator : idGenerator});
   });
 
   it('should store event', function(done){
     store.save = function(event){ 
-      expect(event.name).to.equal('a');
-      expect(event.key).to.equal('b');
-      expect(event.data.a).to.equal('b');
+      assert.equal(event.name, 'a');
+      assert.equal(event.key, 'b');
+      assert.equal(event.data.a, 'b');
+      assert.ok(event.id, 'must have id');
       done();
     };
     es.add({name : 'a', key: 'b', data : { a : 'b'} });
@@ -60,7 +60,7 @@ describe('adding events', function(){
         callback(e);
         es.add(e);
       };
-      expect(addWithoutKey).to.throw('event');
+      assert.throw(addWithoutKey, 'event');
   }
 
   it('should create clone of event data', function(){
@@ -70,14 +70,14 @@ describe('adding events', function(){
       event.name = 'b';
     };
     es.add(eventData);
-    expect(eventData.name).to.equal('a');
+    assert.equal(eventData.name, 'a');
   });
 
   it('should keep id if passed in', function(done){
     var event = getValidEvent();
     event.id = 1;
     store.save = function(event){ 
-      expect(event.id).to.equal(1);
+      assert.equal(event.id, 1);
       done();
     };
     es.add(event);
@@ -87,7 +87,7 @@ describe('adding events', function(){
     var event = getValidEvent();
     es.setIdGenerator(function(){ return 2;});
     store.save = function(event){ 
-      expect(event.id).to.equal(2);
+      assert.equal(event.id, 2);
       done();
     };
     es.add(event);
