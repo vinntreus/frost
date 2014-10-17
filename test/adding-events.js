@@ -10,11 +10,11 @@ var getValidEvent = function(){
 };
 
 describe('adding events', function(){
-  var es, store, idGenerator;
+  var es, store;
   
   beforeEach(function(){
     store = { save : function(){}};
-    es = frost({store : store, idGenerator : idGenerator});
+    es = frost({store : store});
   });
 
   it('should store event', function(done){
