@@ -17,4 +17,17 @@ describe('publish events', function(){
     assert.equal(events[0].name, 'a');
   });
 
+  it('plays events', function(){
+    var es = frost({clearStore: true});
+    var domain = {};
+    es.registerHandler({a : function(event, domain){
+      domain.a = event.data;
+    }});
+
+    es.publishEvent({name: 'a', key:'root', id: 1, data : 2}, 'domain');
+    domain = es.getSnapshot('domain');
+
+    assert.deepEqual(domain, {a : 2});
+  });
+
 });

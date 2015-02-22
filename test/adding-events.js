@@ -18,7 +18,7 @@ describe('adding events', function(){
   });
 
   it('should store event', function(done){
-    store.save = function(event){ 
+    store.addEvent = function(event){ 
       assert.equal(event.name, 'a');
       assert.equal(event.key, 'b');
       assert.equal(event.data.a, 'b');
@@ -66,7 +66,7 @@ describe('adding events', function(){
   it('should create clone of event data', function(){
     var eventData = getValidEvent();
     eventData.name = 'a';
-    store.save = function(event){ 
+    store.addEvent = function(event){ 
       event.name = 'b';
     };
     es.add(eventData);
@@ -76,7 +76,7 @@ describe('adding events', function(){
   it('should keep id if passed in', function(done){
     var event = getValidEvent();
     event.id = 1;
-    store.save = function(event){ 
+    store.addEvent = function(event){ 
       assert.equal(event.id, 1);
       done();
     };
@@ -86,7 +86,7 @@ describe('adding events', function(){
   it('should generate id if missing', function(done){
     var event = getValidEvent();
     es.setIdGenerator(function(){ return 2;});
-    store.save = function(event){ 
+    store.addEvent = function(event){ 
       assert.equal(event.id, 2);
       done();
     };
