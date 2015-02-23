@@ -64,4 +64,22 @@ describe('publish events', function(){
     assert.equal(eventCount, 3);
   });
 
+  it('plays multiple events with rebuild snapshot using defaults', function(){
+    var es = frost({
+      clearStore: true, 
+      defaultSnapshotKey: 'domain', 
+      defaultEventData: {key: 'root'}
+    });
+    var domain = {};
+    es.registerHandler({e : function(event, domain){
+      domain.a = event.data;
+    }});
+
+    es.publishEvent({name: 'e', id: 1, data : 1});
+    es.publishEvent({name: 'e', id: 2, data : 2});
+    domain = es.getSnapshot('domain');
+
+    assert.deepEqual(domain, {a : 2});
+  });
+
 });
