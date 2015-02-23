@@ -93,3 +93,19 @@ describe('adding events', function(){
     es.add(event);
   });
 });
+
+describe('adding events with defaultEventData', function(){
+  var es, store;
+  
+  it('should append default data', function(done){
+    store = { save : function(){}};
+    es = frost({store : store, defaultEventData : {key : 'root'}});
+    var event = getValidEvent();
+    event.key = null;
+    store.addEvent = function(event){ 
+      assert.equal(event.key, 'root');
+      done();
+    };
+    es.add(event);
+  });
+});
