@@ -10,11 +10,11 @@ var getValidEvent = function(){
 };
 
 describe('adding events', function(){
-  var es, store;
+  var store;
   
   beforeEach(function(){
     store = { save : function(){}};
-    es = frost({store : store});
+    frost.init({store : store});
   });
 
   it('should store event', function(done){
@@ -25,7 +25,7 @@ describe('adding events', function(){
       assert.ok(event.id, 'must have id');
       done();
     };
-    es.add({name : 'a', key: 'b', data : { a : 'b'} });
+    frost.add({name : 'a', key: 'b', data : { a : 'b'} });
   });
 
   describe('name is missing', function(){
@@ -58,7 +58,7 @@ describe('adding events', function(){
       var addWithoutKey = function(){
         var e = getValidEvent();
         callback(e);
-        es.add(e);
+        frost.add(e);
       };
       assert.throw(addWithoutKey, 'event');
   }
@@ -69,7 +69,7 @@ describe('adding events', function(){
     store.addEvent = function(event){ 
       event.name = 'b';
     };
-    es.add(eventData);
+    frost.add(eventData);
     assert.equal(eventData.name, 'a');
   });
 
@@ -80,32 +80,32 @@ describe('adding events', function(){
       assert.equal(event.id, 1);
       done();
     };
-    es.add(event);
+    frost.add(event);
   });
 
   it('should generate id if missing', function(done){
     var event = getValidEvent();
-    es.setIdGenerator(function(){ return 2;});
+    frost.setIdGenerator(function(){ return 2;});
     store.addEvent = function(event){ 
       assert.equal(event.id, 2);
       done();
     };
-    es.add(event);
+    frost.add(event);
   });
 });
 
 describe('adding events with defaultEventData', function(){
-  var es, store;
+  var store;
   
   it('should append default data', function(done){
     store = { save : function(){}};
-    es = frost({store : store, defaultEventData : {key : 'root'}});
+    frost.init({store : store, defaultEventData : {key : 'root'}});
     var event = getValidEvent();
     event.key = null;
     store.addEvent = function(event){ 
       assert.equal(event.key, 'root');
       done();
     };
-    es.add(event);
+    frost.add(event);
   });
 });

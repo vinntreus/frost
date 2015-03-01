@@ -4,26 +4,28 @@ var frost = require('../lib/frost.js');
 
 describe('register handler', function(){
 
+  beforeEach(function(){
+    frost.init({clearStore: true});
+  });
+
   it('not added any then handlers are empty object', function(){
-    var es = frost();
-    assert.ok(lodash.isEmpty(es.getHandlers()), 'handlers is not empty');
+    frost.init();
+    assert.ok(lodash.isEmpty(frost.getHandlers()), 'handlers is not empty');
   });
 
   it('adds new handler by key', function(){
-    var es = frost();
     var handler = function(){};
-    
-    es.registerHandler({myHandler : handler});
 
-    assert.equal(es.getHandlers().myHandler, handler);
+    frost.registerHandler({myHandler : handler});
+
+    assert.equal(frost.getHandlers().myHandler, handler);
   });
 
   it('and then clearing it removes all', function(){
-    var es = frost();
-    
-    es.registerHandler({myHandler : function(){}});
-    es.clearHandlers();
-    assert.ok(lodash.isEmpty(es.getHandlers()), 'handlers is not empty');
+    frost.registerHandler({myHandler : function(){}});
+    frost.clearHandlers();
+
+    assert.ok(lodash.isEmpty(frost.getHandlers()), 'handlers is not empty');
   });
 
 });

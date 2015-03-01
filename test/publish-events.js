@@ -3,81 +3,82 @@ var frost = require('../lib/frost.js');
 
 describe('publish events', function(){
 
+  beforeEach(function(){
+    frost.init({clearStore: true});
+  });
+
   it('stores event', function(){
-    var es = frost({clearStore: true});
     var events = [];
-    es.registerHandler({a : function(event, domain){
+    frost.registerHandler({a : function(event, domain){
       domain.a = event.data;
     }});
 
-    es.publishEvent({name: 'a', key:'root', id: 1, data : 2});
-    events = es.getEventsFrom('root');
+    frost.publishEvent({name: 'a', key:'root', id: 1, data : 2});
+    events = frost.getEventsFrom('root');
 
     assert.equal(events.length, 1);
     assert.equal(events[0].name, 'a');
   });
 
   it('plays events', function(){
-    var es = frost({clearStore: true});
     var domain = {};
-    es.registerHandler({b : function(event, domain){
+    frost.registerHandler({b : function(event, domain){
       domain.a = event.data;
     }});
 
-    es.publishEvent({name: 'b', key:'root', id: 1, data : 2}, 'domain');
-    domain = es.getSnapshot('domain');
+    frost.publishEvent({name: 'b', key:'root', id: 1, data : 2}, 'domain');
+    domain = frost.getSnapshot('domain');
 
     assert.deepEqual(domain, {a : 2});
   });
 
   it('plays multiple events with incremental snapshot', function(){
-    var es = frost({clearStore: true});
     var domain = {};
     var eventCount = 0;
-    es.registerHandler({c : function(event, domain){
+    frost.registerHandler({c : function(event, domain){
       domain.a = event.data;
       eventCount += 1;
     }});
 
-    es.publishEvent({name: 'c', key:'root', id: 1, data : 2}, 'domain');
-    es.publishEvent({name: 'c', key:'root', id: 2, data : 1}, 'domain');
-    domain = es.getSnapshot('domain');
+    frost.publishEvent({name: 'c', key:'root', id: 1, data : 2}, 'domain');
+    frost.publishEvent({name: 'c', key:'root', id: 2, data : 1}, 'domain');
+    domain = frost.getSnapshot('domain');
 
     assert.deepEqual(domain, {a : 1});
     assert.equal(eventCount, 2);
   });
 
   it('plays multiple events with rebuild snapshot', function(){
-    var es = frost({clearStore: true, incrementalSnapshot : false});
+    frost.init({clearStore: true, incrementalSnapshot : false});
     var domain = {};
     var eventCount = 0;
-    es.registerHandler({d : function(event, domain){
+    frost.registerHandler({d : function(event, domain){
       domain.a = event.data;
       eventCount += 1;
     }});
 
-    es.publishEvent({name: 'd', key:'root', id: 1, data : 2}, 'domain');
-    es.publishEvent({name: 'd', key:'root', id: 2, data : 1}, 'domain');
-    domain = es.getSnapshot('domain');
+    frost.publishEvent({name: 'd', key:'root', id: 1, data : 2}, 'domain');
+    frost.publishEvent({name: 'd', key:'root', id: 2, data : 1}, 'domain');
+    domain = frost.getSnapshot('domain');
 
     assert.deepEqual(domain, {a : 1});
     assert.equal(eventCount, 3);
   });
 
   it('plays multiple events with rebuild snapshot using defaults', function(){
-    var es = frost({
+    frost.init({
       clearStore: true, 
       defaultSnapshotKey: 'domain', 
       defaultEventData: {key: 'root'}
     });
     var domain = {};
-    es.registerHandler({e : function(event, domain){
+    frost.registerHandler({e : function(event, domain){
       domain.a = event.data;
     }});
 
-    es.publishEvent({name: 'e', id: 1, data : 1});
-    es.publishEvent({name: 'e', id: 2, data : 2});
-    domain = es.getSnapshot('domain');
+    frost.publishEvent({name: 'e', id: 1, data : 1});
+    frost.publishEvent({name: 'e', id: 2, data : 2});
+    domain = frost.getSnapshot('domain');
 
     assert.deepEqual(domain, {a : 2});
   });

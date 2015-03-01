@@ -3,24 +3,26 @@ var frost = require('../lib/frost.js');
 
 describe('play events', function(){
 
+  beforeEach(function(){
+    frost.init({clearStore: true});
+  });
+
   it('builds domain object', function(){
-    var es = frost();
     var domain = null;
-    es.registerHandler({a : function(event, domain){
+    frost.registerHandler({a : function(event, domain){
       domain.a = event.data;
     }});
-    es.add({name: 'a', key:'root', id: 1, data : 2});
+    frost.add({name: 'a', key:'root', id: 1, data : 2});
 
-    domain = es.playEvents('root');
+    domain = frost.playEvents('root');
 
     assert.equal(domain.a, 2);
   });
 
   it("throws exception if handler if missing", function(){
-    var es = frost();
-    es.add({name: 'a', key:'root', id: 1, data : 2});
+    frost.add({name: 'a', key:'root', id: 1, data : 2});
 
-    assert.throws(function(){es.playEvents('root')}, 'Missing event handler for "a" in "root"');
+    assert.throws(function(){frost.playEvents('root')}, 'Missing event handler for "a" in "root"');
   });
 
 });
