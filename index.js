@@ -1,4 +1,4 @@
-var localstorageStore = require('./localstorage-store');
+var localstorageStore = require('./lib/localstorage-store');
 var frost = require('./lib/frost');
 
 frost.useLocalStorage = function(){
