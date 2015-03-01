@@ -1,6 +1,6 @@
 {
   "name": "frost",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Eventstore in the browser (or server)",
   "main": "index.js",
   "scripts": {
